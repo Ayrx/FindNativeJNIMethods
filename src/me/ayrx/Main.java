@@ -43,20 +43,12 @@ public class Main {
             ArrayList<String> methodType = new ArrayList<>();
 
             for (ArgType argument : method.getArguments()) {
-                String type;
-                if (argument.isPrimitive()) {
-                    type = convertPrimitive(argument);
-                } else if (argument.isArray()) {
-                    type = convertArray(argument);
-                } else if (argument.toString().equals("Java.lang.String")) {
-                    type = "jstring";
-                } else {
-                    type = "jobject";
-                }
-                methodType.add(type);
+                methodType.add(parseArgumentType(argument));
             }
 
-            MethodInformation methodInfo = new MethodInformation(method.getFullName(), methodType);
+            String returnType = parseArgumentType(method.getReturnType());
+
+            MethodInformation methodInfo = new MethodInformation(method.getFullName(), methodType, returnType);
             methodsList.methods.add(methodInfo);
 
         }
@@ -72,6 +64,20 @@ public class Main {
             e.printStackTrace();
         }
 
+    }
+
+    private static String parseArgumentType(ArgType argument) {
+        String type;
+        if (argument.isPrimitive()) {
+            type = convertPrimitive(argument);
+        } else if (argument.isArray()) {
+            type = convertArray(argument);
+        } else if (argument.toString().equals("Java.lang.String")) {
+            type = "jstring";
+        } else {
+            type = "jobject";
+        }
+        return type;
     }
 
     private static String convertArray(ArgType type) {
