@@ -48,7 +48,9 @@ public class Main {
 
             String returnType = parseArgumentType(method.getReturnType());
 
-            MethodInformation methodInfo = new MethodInformation(method.getFullName(), methodType, returnType);
+            boolean isStatic = method.getAccessFlags().isStatic();
+
+            MethodInformation methodInfo = new MethodInformation(method.getFullName(), methodType, returnType, isStatic);
             methodsList.methods.add(methodInfo);
 
         }
