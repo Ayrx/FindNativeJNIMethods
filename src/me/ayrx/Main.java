@@ -41,16 +41,21 @@ public class Main {
         for (JavaMethod method : nativeMethods) {
 
             ArrayList<String> methodType = new ArrayList<>();
+            StringBuilder argumentSignatureBuilder = new StringBuilder();
 
             for (ArgType argument : method.getArguments()) {
                 methodType.add(parseArgumentType(argument));
+                argumentSignatureBuilder.append(parseArgumentSignature(argument));
             }
 
             String returnType = parseArgumentType(method.getReturnType());
 
             boolean isStatic = method.getAccessFlags().isStatic();
 
-            MethodInformation methodInfo = new MethodInformation(method.getFullName(), methodType, returnType, isStatic);
+            String argumentSignature = argumentSignatureBuilder.toString();
+
+            MethodInformation methodInfo = new MethodInformation(method.getFullName(), argumentSignature,
+                    methodType, returnType, isStatic);
             methodsList.methods.add(methodInfo);
 
         }
@@ -66,6 +71,16 @@ public class Main {
             e.printStackTrace();
         }
 
+    }
+
+    private static String parseArgumentSignature(ArgType argument) {
+        String type;
+        if (argument.isPrimitive()) {
+            type = convertPrimitiveSignature(argument);
+        } else {
+            type = "L" + argument.getObject().replaceAll("\\.", "/") + ";";
+        }
+        return type;
     }
 
     private static String parseArgumentType(ArgType argument) {
@@ -148,6 +163,45 @@ public class Main {
                 break;
             case "void":
                 ret = "void";
+                break;
+            default:
+                ret = null;
+                break;
+        }
+
+        return ret;
+    }
+
+    private static String convertPrimitiveSignature(ArgType type) {
+        String ret;
+
+        switch (type.getPrimitiveType().getLongName()) {
+            case "boolean":
+                ret = "Z";
+                break;
+            case "byte":
+                ret = "B";
+                break;
+            case "char":
+                ret = "C";
+                break;
+            case "short":
+                ret = "S";
+                break;
+            case "int":
+                ret = "I";
+                break;
+            case "long":
+                ret = "J";
+                break;
+            case "float":
+                ret = "F";
+                break;
+            case "double":
+                ret = "D";
+                break;
+            case "void":
+                ret = "V";
                 break;
             default:
                 ret = null;
