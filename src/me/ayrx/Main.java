@@ -77,6 +77,8 @@ public class Main {
         String type;
         if (argument.isPrimitive()) {
             type = convertPrimitiveSignature(argument);
+        } else if (argument.isArray()) {
+            type = "[" + parseArgumentSignature(argument.getArrayRootElement());
         } else {
             type = "L" + argument.getObject().replaceAll("\\.", "/") + ";";
         }
