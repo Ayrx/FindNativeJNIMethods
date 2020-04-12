@@ -1,5 +1,8 @@
 # FindNativeJNIMethods
 
+NOTE: This project will no longer be updated as the functionality has been
+implemented directly in [JNIAnalyzer][jnianalyzer].
+
 This is a simple command line program that:
 
 1. Parses an APK file
@@ -21,3 +24,4 @@ This program is a simple wrapper around the [JADX][jadx] decompiler that does
 all the heavy lifting.
 
 [jadx]: https://github.com/skylot/jadx`
+[jnianalyzer]: https://github.com/Ayrx/JNIAnalyzer
